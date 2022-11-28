@@ -2,9 +2,8 @@
 
 resource "aws_s3_bucket_replication_configuration" "bucket01_to_bucket02" {
   # Must have bucket versioning enabled first
-  provider   = aws.source
   depends_on = [aws_s3_bucket_versioning.bucketone, aws_s3_bucket.bucketone]
-  // acl = "private"
+
   role   = aws_iam_role.replication01.arn
   bucket = aws_s3_bucket.bucketone.id
 
@@ -15,18 +14,11 @@ resource "aws_s3_bucket_replication_configuration" "bucket01_to_bucket02" {
     destination {
       bucket        = aws_s3_bucket.buckettwo.arn
       storage_class = "STANDARD"
-      encryption_configuration {
-        replica_kms_key_id = aws_kms_key.prachikey.arn
 
-      }
     }
-    source_selection_criteria {
-      sse_kms_encrypted_objects {
-        status = "Enabled"
-      }
-    }
-  }
+     }
 }
+
 # REPLICATION CONFIG FOR TWO
 resource "aws_s3_bucket_replication_configuration" "bucket02_to_bucket01" {
   provider = aws.central
@@ -43,19 +35,12 @@ resource "aws_s3_bucket_replication_configuration" "bucket02_to_bucket01" {
     status = "Enabled"
 
     destination {
-      bucket = aws_s3_bucket.bucketone.arn
-      encryption_configuration {
-        replica_kms_key_id = aws_kms_key.mykey.arn
-
-      }
+      bucket        = aws_s3_bucket.bucketone.arn
       storage_class = "STANDARD"
     }
-    source_selection_criteria {
-      sse_kms_encrypted_objects {
-        status = "Enabled"
-      }
-    }
+
 
   }
 }
+
    
