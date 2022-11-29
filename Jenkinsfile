@@ -2,7 +2,7 @@ pipeline {
     agent any
     
     tools {
-        terraform 'jenkins-terraform'
+        terraform 'terraform-configuration'
     }
     stages {
         stage ("checkout from GIT") {
