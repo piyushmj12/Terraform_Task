@@ -1,36 +1,39 @@
-  pipeline {
-    agent {
-      node {
-        label "main"
-      } 
+pipeline {
+    agent any
+    
+    tools {
+        terraform 'jenkins-terraform'
     }
-
     stages {
-      stage('fetch_latest_code') {
-        steps {
-          git credentialsId: '61910ec8-223a-45e2-90bf-b3772c4add41', url: 'https://github.com/PrachiP29/Terraform_Task'
+        stage ("checkout from GIT") {
+            steps {
+                git branch: 'main', credentialsId: '61910ec8-223a-45e2-90bf-b3772c4add41', url: 'https://github.com/PrachiP29/Terraform_Task'
+            }
         }
-      }
-
-      stage('TF Init&Plan') {
-        steps {
-          sh 'terraform init'
-          sh 'terraform plan'
-        }      
-      }
-
-      stage('Approval') {
-        steps {
-          script {
-            def userInput = input(id: 'confirm', message: 'Apply Terraform?', parameters: [ [$class: 'BooleanParameterDefinition', defaultValue: false, description: 'Apply terraform', name: 'confirm'] ])
-          }
+        stage ("terraform init") {
+            steps {
+                sh 'terraform init'
+            }
         }
-      }
-
-      stage('TF Apply') {
-        steps {
-          sh 'terraform apply -input=false'
+        stage ("terraform fmt") {
+            steps {
+                sh 'terraform fmt'
+            }
         }
-      }
-    } 
-  }
+        stage ("terraform validate") {
+            steps {
+                sh 'terraform validate'
+            }
+        }
+        stage ("terrafrom plan") {
+            steps {
+                sh 'terraform plan '
+            }
+        }
+        stage ("terraform apply") {
+            steps {
+                sh 'terraform apply --auto-approve'
+            }
+        }
+    }
+}
