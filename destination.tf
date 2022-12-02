@@ -11,7 +11,7 @@ resource "aws_kms_key" "westkey" {
   multi_region            = true
 }
 resource "aws_kms_alias" "westkey" {
-  provider      = aws.central
+#   provider      = aws.central
   name          = "alias/westkey"
   target_key_id = aws_kms_key.westkey.key_id
 }
