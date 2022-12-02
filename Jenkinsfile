@@ -2,12 +2,12 @@ pipeline {
     agent any
     
     tools {
-        terraform 'terraform-configuration'
+        terraform 'Terraform-Configuration'
     }
     stages {
         stage ("checkout from GIT") {
             steps {
-                git branch: 'main', credentialsId: '61910ec8-223a-45e2-90bf-b3772c4add41', url: 'https://github.com/PrachiP29/Terraform_Task'
+                git branch: 'main', credentialsId: 'git', url: 'https://github.com/PrachiP29/Terraform_Task'
             }
         }
         stage ("terraform ls") {
