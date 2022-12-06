@@ -6,6 +6,7 @@ terraform {
       configuration_aliases = [ aws.source, aws.central ]
     }
   }
+  required_version = ">= 0.14.9"
 }
 provider "aws" {
   alias   = "source"
